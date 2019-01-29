@@ -56,6 +56,11 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['access_token' => $token]);
     }
 
+    public static function findByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
+    }
+
     /**
      * Returns an ID that can uniquely identify a user identity.
      * @return string|int an ID that uniquely identifies a user identity.
