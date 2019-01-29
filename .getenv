@@ -1,0 +1,13 @@
+YII_DEBUG=1
+YII_ENV='dev'
+
+DB_HOST='localhost'
+DB_NAME=''
+DB_USER = ''
+DB_PASS=''
+
+SMTP_HOST=''
+SMTP_USER=''
+SMTP_PASS=''
+SMTP_PORT=''
+SMTP_ENC=''
