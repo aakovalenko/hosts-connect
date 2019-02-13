@@ -7,3 +7,4 @@ return [
     'password' => getenv('DB_PASS'),
     'charset' => 'utf8',
 ];
+
