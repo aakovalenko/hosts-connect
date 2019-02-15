@@ -44,7 +44,9 @@ class Hosts extends \yii\db\ActiveRecord
     {
         return [
             [['site_name', 'host_admin_panel', 'host_admin_user', 'host_admin_pwd', 'ftp_address', 'ftp_user', 'ftp_password'], 'required'],
-            [['site_name', 'host_admin_panel', 'host_admin_user', 'host_admin_pwd', 'ftp_address', 'ftp_user', 'ftp_password', 'site_admin_user', 'site_admin_pwd', 'site_bd_name', 'site_bd_user', 'site_bd_pwd',  'site_email_pwd','inc_file'], 'string', 'max' => 255],
+            [['site_name', 'host_admin_panel', 'host_admin_user', 'host_admin_pwd', 'ftp_address', 'ftp_user',
+                'ftp_password', 'site_admin_user', 'site_admin_pwd', 'site_bd_name', 'site_bd_user', 'site_bd_pwd',
+                'site_email_pwd','inc_file'], 'string', 'max' => 255],
             [['site_email'],'email'],
             [['files'],'file','extensions'=>'doc,docx,txt'],
         ];
@@ -96,16 +98,18 @@ class Hosts extends \yii\db\ActiveRecord
                 mkdir($this->path_dir, 0777, true);
             }
 
-            $filename = "{$this->path_dir}/".time()."{$this->files}";
+            $filename = "{$this->path_dir}/".time()."-"."{$this->files}";
 
             if ($this->files && is_file(mb_substr($this->files, 1, 9999))) {
                 unlink(mb_substr($this->files, 1, 9999));
             }
+
             if ($this->files->saveAs($filename)) {
                 $this->inc_file = "{$filename}";
+
                 return $this->save(false);
             }
         }
-        return false;
+        return $this->save();
     }
 }

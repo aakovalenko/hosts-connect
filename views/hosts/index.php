@@ -23,13 +23,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+           // ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'site_name',
             'host_admin_panel',
             'host_admin_user',
             'host_admin_pwd',
+            [
+                    'attribute'=>'File',
+                'format'=>'raw',
+                'value' => function($model)
+                {
+                    if($model->inc_file !=null){
+                        return
+                            Html::a('Download file', ['hosts/download', 'id' => $model->id],['class' => 'link']);
+                    }
+                        else{
+                            return 'not exist!';
+                        }
+
+                }
+            ],
             //'ftp_address',
             //'ftp_user',
             //'ftp_password',

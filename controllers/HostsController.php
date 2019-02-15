@@ -93,7 +93,9 @@ class HostsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+        if ($model->load(Yii::$app->request->post()) && $model->upload()) {
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

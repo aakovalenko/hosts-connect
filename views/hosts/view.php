@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Hosts */
 
-$this->title = $model->id;
+$this->title = $model->site_name;
 $this->params['breadcrumbs'][] = ['label' => 'Hosts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+           // 'id',
             'site_name',
             'host_admin_panel',
             'host_admin_user',
@@ -47,12 +47,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'site_email:email',
             'site_email_pwd:email',
             [
-                    'attribute'=>'Download',
+                    'attribute'=>'File',
                 'format'=>'raw',
                 'value' => function($model)
                 {
-                    return
-                        Html::a('Download file', ['hosts/download', 'id' => $model->id],['class' => 'btn btn-primary']);
+                    if($model->inc_file !=null){
+                        return
+                            Html::a('Download file', ['hosts/download', 'id' => $model->id],['class' => 'btn btn-primary']);
+                    }
+                        else{
+                            return 'not exist!';
+                        }
 
                 }
             ]
