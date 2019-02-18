@@ -18,7 +18,9 @@ class HostsSearch extends Hosts
     {
         return [
             [['id'], 'integer'],
-            [['site_name', 'host_admin_panel', 'host_admin_user', 'host_admin_pwd', 'ftp_address', 'ftp_user', 'ftp_password', 'site_admin_user', 'site_admin_pwd', 'site_bd_name', 'site_bd_user', 'site_bd_pwd', 'site_email', 'site_email_pwd'], 'safe'],
+            [['site_name', 'host_admin_panel', 'host_admin_user', 'host_admin_pwd', 'ftp_address', 'ftp_user',
+                'ftp_password', 'site_admin_user', 'site_admin_pwd', 'site_bd_name', 'site_bd_user', 'site_bd_pwd',
+                'site_email', 'site_email_pwd'], 'safe'],
         ];
     }
 

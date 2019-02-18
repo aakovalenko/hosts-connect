@@ -41,10 +41,11 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Hosts', 'url' => ['/hosts']],
-            ['label' => 'Sign Up', 'url' => ['/user/signup']],
+            ['label' => 'Hosts', 'url' => ['/hosts'],'visible'=> !Yii::$app->user->isGuest],
+            ['label' => 'Sign Up', 'url' => ['/user/signup'],'visible'=> Yii::$app->user->isGuest],
+
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => 'Login', 'url' => ['/user/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
@@ -71,7 +72,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; My Hosts <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
