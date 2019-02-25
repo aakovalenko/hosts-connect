@@ -2,6 +2,9 @@
 
 namespace app\models;
 
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Shared\Converter;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
@@ -111,5 +114,65 @@ class Hosts extends \yii\db\ActiveRecord
             }
         }
         return $this->save();
+    }
+
+    public function createDocx($id)
+    {
+        $phpWord = new PhpWord();
+        $model = Hosts::findOne($id);
+
+        $phpWord->setDefaultFontName('Times New Roman');
+        $phpWord->setDefaultFontSize(14);
+
+        $sectionStyle = array(
+            'orientation' => 'portrait',
+            'marginTop' => Converter::pixelToTwip(150), // in twip
+            'marginLeft' => 600,
+            'marginRight' => 600,
+            'colsNum' => 1,
+            'pageNumberStringStart' => 1,
+            'borderBottomSize' => 100,
+            'borderBottomColor' => 'C0C0C0'
+        );
+
+        $section = $phpWord->addSection($sectionStyle);
+
+
+
+        $section->addTitle($model->site_name,1);
+        $section->addTextBreak();
+        //host name
+        $section->addTitle($model->host_admin_panel,3);
+        $text = $model->host_admin_user;
+        $text2 = $model->host_admin_pwd;
+
+        $section->addText(htmlspecialchars($text),
+            array(
+                'name' => 'Arial', 'size'=>36,'color'=>'05724','bold'=>TRUE
+            ),
+            array()
+        );
+        $section->addText(htmlspecialchars($text));
+        $section->addText(htmlspecialchars($text2));
+        $section->addTextBreak();
+        //ftp
+        $section->addTitle($model->ftp_address,3);
+        $text3 = $model->ftp_user;
+        $text4 = $model->ftp_password;
+        $section->addText(htmlspecialchars($text3));
+        $section->addText(htmlspecialchars($text4));
+        $section->addTextBreak();
+
+        //for Download
+        $file =  $model->site_name.'.docx';
+        header("Content-Description: File Transfer");
+        header('Content-Disposition: attachment; filename="' . $file . '"');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        $xmlWriter = IOFactory::createWriter($phpWord, 'Word2007');
+        $xmlWriter->save("php://output");
+
     }
 }

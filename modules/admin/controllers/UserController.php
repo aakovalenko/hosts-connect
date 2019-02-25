@@ -1,21 +1,18 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\admin\controllers;
 
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\Shared\Converter;
 use Yii;
-use app\models\Hosts;
-use app\models\HostsSearch;
+use app\modules\admin\models\User;
+use app\modules\admin\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * HostsController implements the CRUD actions for Hosts model.
+ * UserController implements the CRUD actions for User model.
  */
-class HostsController extends Controller
+class UserController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -33,14 +30,12 @@ class HostsController extends Controller
     }
 
     /**
-     * Lists all Hosts models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $this->checkAccess();
-
-        $searchModel = new HostsSearch();
+        $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,7 +45,7 @@ class HostsController extends Controller
     }
 
     /**
-     * Displays a single Hosts model.
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -63,22 +58,15 @@ class HostsController extends Controller
     }
 
     /**
-     * Creates a new Hosts model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Hosts();
+        $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $model->upload()) {
-           /* $model->host_admin_pwd = $model->generatePwdHash($model->host_admin_pwd);
-            $model->ftp_password = $model->generatePwdHash($model->host_admin_pwd);
-             $model->site_admin_pwd = $model->generatePwdHash($model->site_admin_pwd);
-             $model->site_bd_pwd = $model->generatePwdHash($model->site_admin_pwd);
-             $model->site_email_pwd = $model->generatePwdHash($model->site_admin_pwd);*/
-
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -88,7 +76,7 @@ class HostsController extends Controller
     }
 
     /**
-     * Updates an existing Hosts model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -98,9 +86,7 @@ class HostsController extends Controller
     {
         $model = $this->findModel($id);
 
-
-        if ($model->load(Yii::$app->request->post()) && $model->upload()) {
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -110,7 +96,7 @@ class HostsController extends Controller
     }
 
     /**
-     * Deletes an existing Hosts model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -118,56 +104,24 @@ class HostsController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = Hosts::findOne($id);
-        if(!empty($model->inc_file)){
-            unlink($model->inc_file);
-        }
-        $model->delete();
-
-
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Hosts model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Hosts the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Hosts::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionDownload($id)
-    {
-        $model = Hosts::findOne($id);
-
-        $path = $model->inc_file;
-
-        if (file_exists($path)) {
-            return Yii::$app->response->sendFile($path);
-        } else {
-            throw new NotFoundHttpException("can't find {$model->inc_file} file");
-        }
-    }
-
-    public function checkAccess()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-    }
-
-    public function actionWordDoc($id)
-    {
-        $model = Hosts::findOne($id);
-        $model->createDocx($id);
     }
 }

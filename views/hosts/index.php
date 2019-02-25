@@ -26,6 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
            // ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
+            [
+                   'attribute'=>'site_name',
+                    'format'=>'raw',
+                    'value' => function($model){
+                                if($model->site_name !=null){
+                                    return Html::a($model->site_name, '//' . $model->site_name,['target'=>'_blank','class'=>'link']);
+                                }}
+            ],
             'site_name',
             'host_admin_panel',
             'host_admin_user',
@@ -56,7 +64,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //'site_email:email',
             //'site_email_pwd:email',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view}{update}{delete}{download}',
+                    'buttons' => [
+                            'download' => function($url, $model,$key){
+                                return Html::a('',  ['hosts/word-doc', 'id' => $model->id],['class'=>'glyphicon glyphicon-eye-close','title' => 'Скачать документ']);
+                            }
+                    ]
+            ],
         ],
     ]); ?>
 </div>
