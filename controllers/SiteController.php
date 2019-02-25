@@ -4,11 +4,12 @@ namespace app\controllers;
 
 use app\models\Hosts;
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
 use app\models\ContactForm;
 
 class SiteController extends Controller
@@ -62,8 +63,22 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $model = Hosts::find();
 
-        return $this->render('index');
+        //$pages = new Pagination(['totalCount' => count($model),'pageSize' => 3]);
+
+        $count = $model->count();
+
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize'=>2]);
+
+        $pages = $model->offset($pagination->offset)->limit($pagination->limit)->orderBy('id desc')->all();
+
+
+        return $this->render('index',[
+            //'model' => $model,
+            'pages'=>$pages,
+            'pagination' => $pagination
+        ]);
     }
 
 

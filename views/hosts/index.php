@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'host_admin_panel',
             'host_admin_user',
             'host_admin_pwd',
+
             [
                     'attribute'=>'File',
                 'format'=>'raw',
@@ -69,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{view}{update}{delete}{download}',
                     'buttons' => [
                             'download' => function($url, $model,$key){
-                                return Html::a('',  ['hosts/word-doc', 'id' => $model->id],['class'=>'glyphicon glyphicon-eye-close','title' => 'Скачать документ']);
+                                return Html::a('',  ['hosts/word-doc', 'id' => $model->id],['class'=>'glyphicon glyphicon-download-alt','title' => 'Скачать документ']);
                             }
                     ]
             ],
